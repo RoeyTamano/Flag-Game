@@ -40,4 +40,4 @@ while True:
         x1 = x1 - 5
     if keys[pygame.K_d]:
         x1 = x1 + 5
-    pygame.display.update()
+    pygame.display.update(1)
