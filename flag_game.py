@@ -6,7 +6,7 @@ from sys import exit
 
 pygame.init()
 screen = pygame.display.set_mode((1000, 1000))
-pygame.display.set_caption("Moving with arrows")
+pygame.display.set_caption("moving with arrows")
 img = pygame.image.load(image_filename)
 img = pygame.transform.scale(img, (500, 500))
 img1 = pygame.image.load(image_filename1)
