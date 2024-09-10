@@ -1,7 +1,7 @@
 image_filename = 'pixil-frame-0.png'
 image_filename1 = 'dog.png'
 import pygame
-from pygame.locals import *
+
 from sys import exit
 
 pygame.init()
@@ -20,7 +20,7 @@ while True:
     screen.blit(img, (x, y))
     screen.blit(img1, (x1, y1))
     for event in pygame.event.get():
-        if event.type == QUIT:
+        if event.type == pygame.QUIT:
             exit()
 
     keys = pygame.key.get_pressed()
