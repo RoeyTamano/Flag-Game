@@ -4,15 +4,17 @@ import random
 
 image_filename1 = 'dog.png'
 image_filename2 = 'bush.png'
-
+image_filename3 = 'flag.png'
 pygame.init()
 screen = pygame.display.set_mode((1400, 700))
 pygame.display.set_caption("moving with arrows")
 
 img1 = pygame.image.load(image_filename1)
-img1 = pygame.transform.scale(img1, (2 * (700 / 25), 4 * (1400 / 50)))
+img1 = pygame.transform.scale(img1, (2 * (1400 / 50), 4 * (700 / 25)))
 img2 = pygame.image.load(image_filename2)
-img2 = pygame.transform.scale(img2, (2 * (700 / 25), 2 * (1400 / 50)))
+img2 = pygame.transform.scale(img2, (2 * (1400 / 50), 2 * (700 / 25)))
+img3 = pygame.image.load(image_filename3)
+img3 = pygame.transform.scale(img3, (4 * (1400 / 50), 3 * (700 / 25)))
 x = 0
 y = 0
 
@@ -23,7 +25,7 @@ for i in range(20):
     if board[random_row][random_col] == 0:
         board[random_row][random_col] = 2
 board[0][0] = 1
-
+board[22][46] = 3
 for i in board:
     print(i)
 
@@ -33,6 +35,8 @@ while True:
         for j in range(50):
             if board[i][j] == 2:
                 screen.blit(img2, (j * (1400 / 50), i * (700 / 25)))
+            if board[i][j] == 3:
+                screen.blit(img3, (j * (1400 / 50), i * (700 / 25)))
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -40,8 +44,6 @@ while True:
 
         screen.blit(img1, (x * (1400 / 50), y * (700 / 25)))
         keys = pygame.key.get_pressed()
-
-
         if keys[pygame.K_RIGHT]:
             board[y][x] = 0
             x += 1
