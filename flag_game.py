@@ -39,9 +39,11 @@ for i in range(20):
 board[0][0] = 1
 board[22][46] = 3
 
-
-
-
+player = []
+flag = []
+for i in range(21, 25):
+    for j in range(46, 50):
+        flag.append((i, j))
 for i in board:
     print(i)
 print(bush_list)
@@ -106,10 +108,13 @@ while True:
                 rect = pygame.Rect(i, j, 700 / 25, 1400 / 50)
                 pygame.draw.rect(screen, 'black', rect, 1)
 
-        print("list:", bomb_list)
-        if (y, x - 1) in bomb_list or (y, x - 2) in bomb_list:
-            screen.fill('red')
 
+        for i in range(y, y + 4):
+            for j in range(x, x + 2):
+                player.append((i, j))
+        for i in player:
+            if i in flag:
+                screen.fill('green')
         pygame.display.update()
         if keys[pygame.K_SPACE] and run:
             run = False
