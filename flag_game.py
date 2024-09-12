@@ -51,7 +51,8 @@ while True:
     for i in bush_list:
         board[i[0]][i[1]] = 2
         screen.blit(img2, (i[1] * (1400 / 50), i[0] * (700 / 25)))
-
+    for i in bomb_list:
+        board[i[0]][i[1]] = 4
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -96,19 +97,20 @@ while True:
             for i in board:
                print(i)
             print("-----")
-        if keys[pygame.K_SPACE] and run:
-            run = False
-            for i in bomb_list:
-                board[i[0]][i[1]] = 4
-                screen.blit(img4, (i[1] * (1400 / 50), i[0] * (700 / 25)))
-            for i in range(0, 1400, int(700 / 25)):
-                for j in range(0, 700, int(1400 / 50)):
-                    rect = pygame.Rect(i, j, 700 / 25, 1400 / 50)
-                    pygame.draw.rect(screen, 'black', rect, 1)
+        # if keys[pygame.K_SPACE] and run:
+        for i in bomb_list:
+            board[i[0]][i[1]] = 4
+            screen.blit(img4, (i[1] * (1400 / 50), i[0] * (700 / 25)))
+        for i in range(0, 1400, int(700 / 25)):
+            for j in range(0, 700, int(1400 / 50)):
+                rect = pygame.Rect(i, j, 700 / 25, 1400 / 50)
+                pygame.draw.rect(screen, 'black', rect, 1)
 
-        if (x,y) in bomb_list:
+        print("list:", bomb_list)
+        if (y, x - 1) in bomb_list or (y, x - 2) in bomb_list:
             screen.fill('red')
 
         pygame.display.update()
-        if keys[pygame.K_SPACE] and not run:
+        if keys[pygame.K_SPACE] and run:
+            run = False
             time.sleep(0.5)
