@@ -108,6 +108,11 @@ while True:
                 rect = pygame.Rect(i, j, 700 / 25, 1400 / 50)
                 pygame.draw.rect(screen, 'black', rect, 1)
 
+        for i in player:
+            if i in bomb_list:
+                screen.fill('red')
+
+        print(x, y)
 
         for i in range(y, y + 4):
             for j in range(x, x + 2):
