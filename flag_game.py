@@ -68,7 +68,7 @@ while True:
         screen.blit(img1, (x * (width / 50), y * (700 / 25)))
         keys = pygame.key.get_pressed()
 
-        if keys[pygame.K_RIGHT]:
+        if keys[pygame.K_RIGHT] :
             board[y][x] = 0
             x += 1
             if x > 48:
@@ -104,14 +104,16 @@ while True:
             for i in board:
                 print(i)
             print("-----")
-        if keys[pygame.K_SPACE] and run:
+        if keys[pygame.K_SPACE]:
+            screen.fill('black')
             for i in bomb_list:
                 board[i[0]][i[1]] = 4
                 screen.blit(img4, (i[1] * (width / 50), i[0] * (height / 25)))
-        for i in range(0, width, int(height / 25)):
-            for j in range(0, 700, int(width / 50)):
-                rect = pygame.Rect(i, j, height / 25, width / 50)
-                pygame.draw.rect(screen, 'black', rect, 1)
+            for i in range(0, width, int(height / 25)):
+                for j in range(0, 700, int(width / 50)):
+                    rect = pygame.Rect(i, j, height / 25, width / 50)
+                    pygame.draw.rect(screen, 'green', rect, 1)
+            screen.blit(img1, (x * (width / 50), y * (700 / 25)))
 
         for i in player:
             if i in bomb_list:
@@ -126,14 +128,14 @@ while True:
             if i in bomb_list:
                 screen.fill('red')
                 font = pygame.font.SysFont("Arial", 42)
-                txtsurf = font.render("no chicken for you, you monkey", True, 'black')
+                txtsurf = font.render("no chicken for you, you dog", True, 'black')
                 screen.blit(txtsurf, (470 ,280))
             if i in flag:
                 screen.fill('green')
                 font = pygame.font.SysFont("Arial", 48)
-                txtsurf = font.render("good monkey, you can eat today", True, 'black')
+                txtsurf = font.render("good dog, you can eat today", True, 'black')
                 screen.blit(txtsurf, (470, 280))
         pygame.display.update()
-        if keys[pygame.K_SPACE] and run:
+        if keys[pygame.K_SPACE]:
             run = False
             time.sleep(0.5)
