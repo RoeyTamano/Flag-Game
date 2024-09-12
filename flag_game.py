@@ -9,19 +9,23 @@ image_filename3 = 'flag.png'
 image_filename4 = 'scary_dog.png'
 run = True
 pygame.init()
-screen = pygame.display.set_mode((1400, 700))
+width = 1400
+height = 700
+screen = pygame.display.set_mode((width, height))
 pygame.display.set_caption("moving with arrows")
 
 img1 = pygame.image.load(image_filename1)
-img1 = pygame.transform.scale(img1, (2 * (1400 / 50), 4 * (700 / 25)))
+img1 = pygame.transform.scale(img1, (2 * (width / 50), 4 * (height / 25)))
 img2 = pygame.image.load(image_filename2)
-img2 = pygame.transform.scale(img2, (2 * (1400 / 50), 2 * (700 / 25)))
+img2 = pygame.transform.scale(img2, (2 * (width / 50), 2 * (height / 25)))
 img3 = pygame.image.load(image_filename3)
-img3 = pygame.transform.scale(img3, (4 * (1400 / 50), 3 * (700 / 25)))
+img3 = pygame.transform.scale(img3, (4 * (width / 50), 3 * (height / 25)))
 img4 = pygame.image.load(image_filename4)
-img4 = pygame.transform.scale(img4, (3 * (1400 / 50), 1 * (700 / 25)))
+img4 = pygame.transform.scale(img4, (3 * (width / 50), 1 * (height / 25)))
 x = 0
 y = 0
+qq = 400
+ww = 400
 bush_list = []
 bomb_list = []
 board = [[0 for i in range(50)] for j in range(25)]
@@ -44,15 +48,16 @@ flag = []
 for i in range(21, 25):
     for j in range(46, 50):
         flag.append((i, j))
+
 for i in board:
     print(i)
 print(bush_list)
 while True:
     screen.fill("dark green")
-    screen.blit(img3, (46 * (700 / 25), 21 * (1400 / 50)))
+    screen.blit(img3, (46 * (height / 25), 21 * (width / 50)))
     for i in bush_list:
         board[i[0]][i[1]] = 2
-        screen.blit(img2, (i[1] * (1400 / 50), i[0] * (700 / 25)))
+        screen.blit(img2, (i[1] * (width / 50), i[0] * (height / 25)))
     for i in bomb_list:
         board[i[0]][i[1]] = 4
 
@@ -60,7 +65,7 @@ while True:
         if event.type == pygame.QUIT:
             exit()
 
-        screen.blit(img1, (x * (1400 / 50), y * (700 / 25)))
+        screen.blit(img1, (x * (width / 50), y * (700 / 25)))
         keys = pygame.key.get_pressed()
 
         if keys[pygame.K_RIGHT]:
@@ -97,15 +102,15 @@ while True:
                 y = 21
             board[y][x] = 1
             for i in board:
-               print(i)
+                print(i)
             print("-----")
-        # if keys[pygame.K_SPACE] and run:
-        for i in bomb_list:
-            board[i[0]][i[1]] = 4
-            screen.blit(img4, (i[1] * (1400 / 50), i[0] * (700 / 25)))
-        for i in range(0, 1400, int(700 / 25)):
-            for j in range(0, 700, int(1400 / 50)):
-                rect = pygame.Rect(i, j, 700 / 25, 1400 / 50)
+        if keys[pygame.K_SPACE] and run:
+            for i in bomb_list:
+                board[i[0]][i[1]] = 4
+                screen.blit(img4, (i[1] * (width / 50), i[0] * (height / 25)))
+        for i in range(0, width, int(height / 25)):
+            for j in range(0, 700, int(width / 50)):
+                rect = pygame.Rect(i, j, height / 25, width / 50)
                 pygame.draw.rect(screen, 'black', rect, 1)
 
         for i in player:
@@ -113,13 +118,21 @@ while True:
                 screen.fill('red')
 
         print(x, y)
+        for j in range(x, x + 2):
+            player.append((y + 3, j))
 
-        for i in range(y, y + 4):
-            for j in range(x, x + 2):
-                player.append((i, j))
+        print("list:", bomb_list)
         for i in player:
+            if i in bomb_list:
+                screen.fill('red')
+                font = pygame.font.SysFont("Arial", 42)
+                txtsurf = font.render("no chicken for you, you monkey", True, 'black')
+                screen.blit(txtsurf, (470 ,280))
             if i in flag:
                 screen.fill('green')
+                font = pygame.font.SysFont("Arial", 48)
+                txtsurf = font.render("good monkey, you can eat today", True, 'black')
+                screen.blit(txtsurf, (470, 280))
         pygame.display.update()
         if keys[pygame.K_SPACE] and run:
             run = False
