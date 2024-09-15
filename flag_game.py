@@ -14,6 +14,9 @@ height = 700
 screen = pygame.display.set_mode((width, height))
 pygame.display.set_caption("moving with arrows")
 
+
+num = 0
+
 img1 = pygame.image.load(image_filename1)
 img1 = pygame.transform.scale(img1, (2 * (width / 50), 4 * (height / 25)))
 img2 = pygame.image.load(image_filename2)
@@ -42,7 +45,7 @@ for i in range(20):
         board[random_row][random_col] = 4
 board[0][0] = 1
 board[22][46] = 3
-
+space_start = 0
 player = []
 flag = []
 for i in range(21, 25):
@@ -51,7 +54,7 @@ for i in range(21, 25):
 
 for i in board:
     print(i)
-print(bush_list)
+
 while True:
     screen.fill("dark green")
     screen.blit(img3, (46 * (height / 25), 21 * (width / 50)))
@@ -64,11 +67,18 @@ while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             exit()
-
+        if event.type == pygame.KEYDOWN:  # keydown
+            if event.key == pygame.K_SPACE:
+                space_start = pygame.time.get_ticks()
+        if event.type == pygame.KEYUP:  # keyup
+            if event.key == pygame.K_SPACE:
+                space_end = pygame.time.get_ticks()
+                if space_end - space_start >= 2000:
+                    print("hello")
         screen.blit(img1, (x * (width / 50), y * (700 / 25)))
         keys = pygame.key.get_pressed()
 
-        if keys[pygame.K_RIGHT] :
+        if keys[pygame.K_RIGHT]:
             board[y][x] = 0
             x += 1
             if x > 48:
@@ -115,21 +125,21 @@ while True:
                     pygame.draw.rect(screen, 'green', rect, 1)
             screen.blit(img1, (x * (width / 50), y * (700 / 25)))
 
-        for i in player:
-            if i in bomb_list:
-                screen.fill('red')
-
-        print(x, y)
         for j in range(x, x + 2):
             player.append((y + 3, j))
 
-        print("list:", bomb_list)
         for i in player:
             if i in bomb_list:
                 screen.fill('red')
                 font = pygame.font.SysFont("Arial", 42)
                 txtsurf = font.render("no chicken for you, you dog", True, 'black')
-                screen.blit(txtsurf, (470 ,280))
+                screen.blit(txtsurf, (470, 280))
+                # num += 1
+                # f = open("txt.txt", "r+")
+                # f.truncate(0)
+                # f.write(str(num))
+                # f.close()
+
             if i in flag:
                 screen.fill('green')
                 font = pygame.font.SysFont("Arial", 48)
