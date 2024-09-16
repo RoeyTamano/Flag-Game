@@ -163,25 +163,25 @@ while True:
         for i in range(len(bomb_list)):
             bomb_list[i] = tuple(bomb_list[i])
         for i in player:
-            if i in bomb_list:
-                screen.fill('red')
-                font = pygame.font.SysFont("Arial", 42)
-                txtsurf = font.render("no chicken for you, you dog", True, 'black')
-                screen.blit(txtsurf, (470, 280))
-
-            if i in flag:
-                screen.fill('green')
-                font = pygame.font.SysFont("Arial", 48)
-                txtsurf = font.render("good dog, you can eat today", True, 'black')
-                screen.blit(txtsurf, (470, 280))
-
             if i in hole_list:
                 random_row = random.randint(0, 23)
                 random_col = random.randint(0, 48)
                 y = random_row
                 x = random_col
                 player.remove(i)
-            pygame.display.update()
+            elif i in bomb_list:
+                screen.fill('red')
+                font = pygame.font.SysFont("Arial", 42)
+                txtsurf = font.render("no chicken for you, you dog", True, 'black')
+                screen.blit(txtsurf, (470, 280))
+
+            elif i in flag:
+                screen.fill('green')
+                font = pygame.font.SysFont("Arial", 48)
+                txtsurf = font.render("good dog, you can eat today", True, 'black')
+                screen.blit(txtsurf, (470, 280))
+
+        pygame.display.update()
 
         if keys[pygame.K_SPACE]:
             run = False
