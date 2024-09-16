@@ -8,6 +8,7 @@ image_filename1 = 'dog.png'
 image_filename2 = 'bush.png'
 image_filename3 = 'flag.png'
 image_filename4 = 'scary_dog.png'
+image_filename5 = 'hole.png'
 run = True
 pygame.init()
 width = 1400
@@ -16,11 +17,7 @@ screen = pygame.display.set_mode((width, height))
 pygame.display.set_caption("moving with arrows")
 NUM_KEYS = [pygame.K_1, pygame.K_2, pygame.K_3, pygame.K_4, pygame.K_5, pygame.K_6, pygame.K_7, pygame.K_8, pygame.K_9]
 num = 0
-file_read = open("data_base.txt", "r")
-save = file_read.read()
-print(save.split(":"))
-print(type(save.split(":")))
-file_read.close()
+
 img1 = pygame.image.load(image_filename1)
 img1 = pygame.transform.scale(img1, (2 * (width / 50), 4 * (height / 25)))
 img2 = pygame.image.load(image_filename2)
@@ -29,9 +26,13 @@ img3 = pygame.image.load(image_filename3)
 img3 = pygame.transform.scale(img3, (4 * (width / 50), 3 * (height / 25)))
 img4 = pygame.image.load(image_filename4)
 img4 = pygame.transform.scale(img4, (3 * (width / 50), 1 * (height / 25)))
+img5 = pygame.image.load(image_filename5)
+img5 = pygame.transform.scale(img5, (3 * (width / 50), 1 * (height / 25)))
+
 x = 0
 y = 0
 
+hole_list = []
 bush_list = []
 bomb_list = []
 board = [[0 for i in range(50)] for j in range(25)]
@@ -46,6 +47,13 @@ for i in range(20):
     if board[random_row][random_col] == 0:
         bomb_list.append((random_row, random_col))
         board[random_row][random_col] = 4
+for i in range(5):
+    random_row = random.randint(0, 23)
+    random_col = random.randint(0, 48)
+    if board[random_row][random_col] == 0:
+        hole_list.append((random_row, random_col))
+        board[random_row][random_col] = 5
+
 board[0][0] = 1
 board[22][46] = 3
 space_start = 0
@@ -98,8 +106,8 @@ while True:
         for i in bomb_list:
             board[i[0]][i[1]] = 4
         screen.blit(img1, (x * (width / 50), y * (700 / 25)))
-        keys = pygame.key.get_pressed()
 
+        keys = pygame.key.get_pressed()
         if keys[pygame.K_RIGHT]:
             board[y][x] = 0
             x += 1
@@ -141,6 +149,9 @@ while True:
             for i in bomb_list:
                 board[i[0]][i[1]] = 4
                 screen.blit(img4, (i[1] * (width / 50), i[0] * (height / 25)))
+            for j in hole_list:
+                board[j[0]][j[1]] = 5
+                screen.blit(img5, (j[1] * (width / 50), j[0] * (height / 25)))
             for i in range(0, width, int(height / 25)):
                 for j in range(0, 700, int(width / 50)):
                     rect = pygame.Rect(i, j, height / 25, width / 50)
@@ -157,14 +168,21 @@ while True:
                 font = pygame.font.SysFont("Arial", 42)
                 txtsurf = font.render("no chicken for you, you dog", True, 'black')
                 screen.blit(txtsurf, (470, 280))
-                # num += 1
 
             if i in flag:
                 screen.fill('green')
                 font = pygame.font.SysFont("Arial", 48)
                 txtsurf = font.render("good dog, you can eat today", True, 'black')
                 screen.blit(txtsurf, (470, 280))
-        pygame.display.update()
+
+            if i in hole_list:
+                random_row = random.randint(0, 23)
+                random_col = random.randint(0, 48)
+                y = random_row
+                x = random_col
+                player.remove(i)
+            pygame.display.update()
+
         if keys[pygame.K_SPACE]:
             run = False
             time.sleep(0.5)
