@@ -61,11 +61,6 @@ for i in board:
 while True:
     screen.fill("dark green")
     screen.blit(img3, (46 * (height / 25), 21 * (width / 50)))
-    for i in bush_list:
-        board[i[0]][i[1]] = 2
-        screen.blit(img2, (i[1] * (width / 50), i[0] * (height / 25)))
-    for i in bomb_list:
-        board[i[0]][i[1]] = 4
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -90,11 +85,18 @@ while True:
                     else:
                         file_read = open("data_base.txt", "r")
                         base = json.load(file_read)
-                        x, y = base["player"][0], base["player"][1]
+                        board = base["board"]
+                        board[y][x] = 0
+                        y, x = base["player"][0], base["player"][1]
                         bush_list = base["bush"]
                         bomb_list = base["bomb"]
-                        board = base["board"]
+                        player.clear()
 
+        for i in bush_list:
+            board[i[0]][i[1]] = 2
+            screen.blit(img2, (i[1] * (width / 50), i[0] * (height / 25)))
+        for i in bomb_list:
+            board[i[0]][i[1]] = 4
         screen.blit(img1, (x * (width / 50), y * (700 / 25)))
         keys = pygame.key.get_pressed()
 
@@ -147,7 +149,8 @@ while True:
 
         for j in range(x, x + 2):
             player.append((y + 3, j))
-
+        for i in range(len(bomb_list)):
+            bomb_list[i] = tuple(bomb_list[i])
         for i in player:
             if i in bomb_list:
                 screen.fill('red')
