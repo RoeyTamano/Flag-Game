@@ -13,8 +13,7 @@ width = 1400
 height = 700
 screen = pygame.display.set_mode((width, height))
 pygame.display.set_caption("moving with arrows")
-
-
+NUM_KEYS = [pygame.K_1, pygame.K_2, pygame.K_3, pygame.K_4, pygame.K_5, pygame.K_6, pygame.K_7, pygame.K_8, pygame.K_9]
 num = 0
 
 img1 = pygame.image.load(image_filename1)
@@ -67,14 +66,21 @@ while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             exit()
-        if event.type == pygame.KEYDOWN:  # keydown
-            if event.key == pygame.K_SPACE:
-                space_start = pygame.time.get_ticks()
-        if event.type == pygame.KEYUP:  # keyup
-            if event.key == pygame.K_SPACE:
-                space_end = pygame.time.get_ticks()
-                if space_end - space_start >= 2000:
-                    print("hello")
+        for i in NUM_KEYS:
+            if event.type == pygame.KEYDOWN:  # keydown
+                if event.key == i:
+                    space_start = pygame.time.get_ticks()
+            if event.type == pygame.KEYUP:  # keyup
+                if event.key == i:
+                    space_end = pygame.time.get_ticks()
+                    if space_end - space_start >= 1000:
+                        file_read = open("data_base.txt", "r")
+                        data = file_read.read()
+                        file_read.close()
+                        file_write = open("data_base.txt", "w")
+                        file_write.write(f"{data}\n{str((x, y))}\n{str(bush_list)}\n{str(bomb_list)}")
+                        file_write.close()
+
         screen.blit(img1, (x * (width / 50), y * (700 / 25)))
         keys = pygame.key.get_pressed()
 
@@ -135,10 +141,6 @@ while True:
                 txtsurf = font.render("no chicken for you, you dog", True, 'black')
                 screen.blit(txtsurf, (470, 280))
                 # num += 1
-                # f = open("txt.txt", "r+")
-                # f.truncate(0)
-                # f.write(str(num))
-                # f.close()
 
             if i in flag:
                 screen.fill('green')
