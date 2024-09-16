@@ -2,6 +2,7 @@ import pygame
 from sys import exit
 import random
 import time
+import json
 
 image_filename1 = 'dog.png'
 image_filename2 = 'bush.png'
@@ -15,7 +16,11 @@ screen = pygame.display.set_mode((width, height))
 pygame.display.set_caption("moving with arrows")
 NUM_KEYS = [pygame.K_1, pygame.K_2, pygame.K_3, pygame.K_4, pygame.K_5, pygame.K_6, pygame.K_7, pygame.K_8, pygame.K_9]
 num = 0
-
+file_read = open("data_base.txt", "r")
+save = file_read.read()
+print(save.split(":"))
+print(type(save.split(":")))
+file_read.close()
 img1 = pygame.image.load(image_filename1)
 img1 = pygame.transform.scale(img1, (2 * (width / 50), 4 * (height / 25)))
 img2 = pygame.image.load(image_filename2)
@@ -26,8 +31,7 @@ img4 = pygame.image.load(image_filename4)
 img4 = pygame.transform.scale(img4, (3 * (width / 50), 1 * (height / 25)))
 x = 0
 y = 0
-qq = 400
-ww = 400
+
 bush_list = []
 bomb_list = []
 board = [[0 for i in range(50)] for j in range(25)]
@@ -73,13 +77,23 @@ while True:
             if event.type == pygame.KEYUP:  # keyup
                 if event.key == i:
                     space_end = pygame.time.get_ticks()
-                    if space_end - space_start >= 1000:
-                        file_read = open("data_base.txt", "r")
-                        data = file_read.read()
-                        file_read.close()
+                    if space_end - space_start < 1000:
+                        data = {
+                            "player": (x, y),
+                            "bush": bush_list,
+                            "bomb": bomb_list,
+                            "board": board
+                        }
                         file_write = open("data_base.txt", "w")
-                        file_write.write(f"{data}\n{str((x, y))}\n{str(bush_list)}\n{str(bomb_list)}")
+                        json.dump(data, file_write)
                         file_write.close()
+                    else:
+                        file_read = open("data_base.txt", "r")
+                        base = json.load(file_read)
+                        x, y = base["player"][0], base["player"][1]
+                        bush_list = base["bush"]
+                        bomb_list = base["bomb"]
+                        board = base["board"]
 
         screen.blit(img1, (x * (width / 50), y * (700 / 25)))
         keys = pygame.key.get_pressed()
